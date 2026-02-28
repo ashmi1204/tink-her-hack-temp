@@ -2,27 +2,27 @@
   <img src="./img.png" alt="Project Banner" width="100%">
 </p>
 
-# [Project Name] 🎯
+# ReServe🎯
 
 ## Basic Details
 
-### Team Name: [Name]
+### Team Name: Lumen
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
+- Member 1: Ashmi Prakash - College Of Engineering Trivandrum
+- Member 2: Ann Susan Jose - College Of Engineering Trivandrum
 
 ### Hosted Project Link
 [mention your project hosted link here]
 
 ### Project Description
-[2-3 lines about what your project does]
+An app interface that connects people/organisations with excess food to those in need and thereby minimising the food wastage.Donor can provide details like food type,pickup location,deadline etc and the accepter can claim the food and do the pickup as needed.
 
 ### The Problem statement
-[What problem are you solving?]
+Large quantities of food are being wasted in functions and restaurants due to the lack of proper coordination between food donors and acceptors which causes hunger and starvation.
 
 ### The Solution
-[How are you solving it?]
+We created a mobile application that connects the donors with the acceptors hence helping those in need of food.Available and donatable food are being posted by the donor and acceptors can claim the food if they are in the vicinity.The available food list gets updated accordingly.
 
 ---
 
@@ -31,23 +31,16 @@
 ### Technologies/Components Used
 
 **For Software:**
-- Languages used: [e.g., JavaScript, Python, Java]
-- Frameworks used: [e.g., React, Django, Spring Boot]
-- Libraries used: [e.g., axios, pandas, JUnit]
-- Tools used: [e.g., VS Code, Git, Docker]
+- Languages used: Dart
+- Frameworks used: Flutter
+- Libraries used:firebase_auth,google_fonts,cloud_firestore,firebase_core
+- Tools used: VS Code, Git
 
-**For Hardware:**
-- Main components: [List main components]
-- Specifications: [Technical specifications]
-- Tools required: [List tools needed]
-
----
-
-## Features
+### Features
 
 List the key features of your project:
-- Feature 1: [Description]
-- Feature 2: [Description]
+- Feature 1: People can register using mail and password which directs them to their homepage and registered users can then login to their page.
+- Feature 2: In the homepage,there are options for donating and accepting food
 - Feature 3: [Description]
 - Feature 4: [Description]
 
@@ -63,17 +56,9 @@ List the key features of your project:
 ```
 
 #### Run
-```bash
-[Run commands - e.g., npm start, python app.py]
+```flutter run
 ```
 
-### For Hardware:
-
-#### Components Required
-[List all components needed with specifications]
-
-#### Circuit Setup
-[Explain how to set up the circuit]
 
 ---
 
