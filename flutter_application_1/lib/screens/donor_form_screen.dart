@@ -13,7 +13,8 @@ class _DonorFormScreenState extends State<DonorFormScreen> {
   final _foodController = TextEditingController();
   final _quantityController = TextEditingController();
 
-  Future<void> _uploadFood() async {
+Future<void> _uploadFood() async {
+  try {
     // 1. Get Location
     Position position = await Geolocator.getCurrentPosition();
 
@@ -27,10 +28,19 @@ class _DonorFormScreenState extends State<DonorFormScreen> {
       'timestamp': FieldValue.serverTimestamp(),
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Food posted! Ready for pickup.')),
-    );
+    // 3. NEW: Clear the data entry points
+    _foodController.clear();
+    _quantityController.clear();
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Food posted! Ready for pickup.')),
+      );
+    }
+  } catch (e) {
+    debugPrint("Error: $e");
   }
+}
 
   @override
   Widget build(BuildContext context) {
