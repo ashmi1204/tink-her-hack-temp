@@ -40,9 +40,9 @@ We created a mobile application that connects the donors with the acceptors henc
 
 List the key features of your project:
 - Feature 1: People can register using mail and password which directs them to their homepage and registered users can then login to their page.
-- Feature 2: In the homepage,there are options for donating and accepting food
-- Feature 3: [Description]
-- Feature 4: [Description]
+- Feature 2: In the homepage,there are options for donating and accepting food and a manual detailing how the application works.If they have any previous donations,there is a button for displaying them.
+- Feature 3: In the donor Dashboard,details like foodtype,name,quantity and pickup details are entered and posted. The data will be saved to the database accordingly.
+- Feature 4: Available food and its details are being displayed.Users can claim based on their convinience.
 
 ---
 
@@ -52,15 +52,11 @@ List the key features of your project:
 
 #### Installation
 ```bash
-[Installation commands - e.g., npm install, pip install -r requirements.txt]
-```
+flutter pub get,flutter create foodConnectApp
 
 #### Run
 ```flutter run
-```
 
-
----
 
 ## Project Documentation
 
@@ -68,104 +64,24 @@ List the key features of your project:
 
 #### Screenshots (Add at least 3)
 
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+<img width="1920" height="1080" alt="SRCN1" src="https://github.com/user-attachments/assets/9799b14b-8eaa-4cf5-a931-4f091b30042a" />
+HOMEPAGE:Options for donating food,accepting and viewing past contributions
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+<img width="1920" height="1080" alt="SCRN2" src="https://github.com/user-attachments/assets/ffd244d9-59f0-4f13-ae3a-04a2dd7cfa10" />
+DONOR DASHBOARD:Details of Food are entered and posted
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
 
-#### Diagrams
-
-**System Architecture:**
-
-![Architecture Diagram](docs/architecture.png)
-*Explain your system architecture - components, data flow, tech stack interaction*
-
-**Application Workflow:**
-
-![Workflow](docs/workflow.png)
-*Add caption explaining your workflow*
-
+<img width="1920" height="1080" alt="SCRN3" src="https://github.com/user-attachments/assets/ea1d6b3a-eb8e-4e58-b0c9-fc07d760fd1b" />
+ACCEPTOR DASHBOARD:Available food are displayed and users can claim them. 
 ---
 
-### For Hardware:
-
-#### Schematic & Circuit
-
-![Circuit](Add your circuit diagram here)
-*Add caption explaining connections*
-
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
-
-#### Build Photos
-
-![Team](Add photo of your team here)
-
-![Components](Add photo of your components here)
-*List out all components shown*
-
-![Build](Add photos of build process here)
-*Explain the build steps*
-
-![Final](Add photo of final product here)
-*Explain the final build*
-
----
-
-## Additional Documentation
-
-### For Web Projects with Backend:
-
-#### API Documentation
-
-**Base URL:** `https://api.yourproject.com`
-
-##### Endpoints
-
-**GET /api/endpoint**
-- **Description:** [What it does]
-- **Parameters:**
-  - `param1` (string): [Description]
-  - `param2` (integer): [Description]
-- **Response:**
-```json
-{
-  "status": "success",
-  "data": {}
-}
-```
-
-**POST /api/endpoint**
-- **Description:** [What it does]
-- **Request Body:**
-```json
-{
-  "field1": "value1",
-  "field2": "value2"
-}
-```
-- **Response:**
-```json
-{
-  "status": "success",
-  "message": "Operation completed"
-}
-```
-
-[Add more endpoints as needed...]
-
----
 
 ### For Mobile Apps:
 
 #### App Flow Diagram
 
-![App Flow](docs/app-flow.png)
-*Explain the user flow through your application*
+![appflow](https://github.com/user-attachments/assets/4b36ce5e-a562-4cab-8b22-65c8e71d652c)
+
 
 #### Installation Guide
 
@@ -192,62 +108,10 @@ flutter build apk
 # or
 ./gradlew assembleDebug
 
-# For iOS
-flutter build ios
-# or
-xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug
-```
+
 
 ---
 
-### For Hardware Projects:
-
-#### Bill of Materials (BOM)
-
-| Component | Quantity | Specifications | Price | Link/Source |
-|-----------|----------|----------------|-------|-------------|
-| Arduino Uno | 1 | ATmega328P, 16MHz | ₹450 | [Link] |
-| LED | 5 | Red, 5mm, 20mA | ₹5 each | [Link] |
-| Resistor | 5 | 220Ω, 1/4W | ₹1 each | [Link] |
-| Breadboard | 1 | 830 points | ₹100 | [Link] |
-| Jumper Wires | 20 | Male-to-Male | ₹50 | [Link] |
-| [Add more...] | | | | |
-
-**Total Estimated Cost:** ₹[Amount]
-
-#### Assembly Instructions
-
-**Step 1: Prepare Components**
-1. Gather all components listed in the BOM
-2. Check component specifications
-3. Prepare your workspace
-![Step 1](images/assembly-step1.jpg)
-*Caption: All components laid out*
-
-**Step 2: Build the Power Supply**
-1. Connect the power rails on the breadboard
-2. Connect Arduino 5V to breadboard positive rail
-3. Connect Arduino GND to breadboard negative rail
-![Step 2](images/assembly-step2.jpg)
-*Caption: Power connections completed*
-
-**Step 3: Add Components**
-1. Place LEDs on breadboard
-2. Connect resistors in series with LEDs
-3. Connect LED cathodes to GND
-4. Connect LED anodes to Arduino digital pins (2-6)
-![Step 3](images/assembly-step3.jpg)
-*Caption: LED circuit assembled*
-
-**Step 4: [Continue for all steps...]**
-
-**Final Assembly:**
-![Final Build](images/final-build.jpg)
-*Caption: Completed project ready for testing*
-
----
-
-### For Scripts/CLI Tools:
 
 #### Command Reference
 
