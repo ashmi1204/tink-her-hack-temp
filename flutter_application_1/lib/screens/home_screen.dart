@@ -1,78 +1,5 @@
-// import 'package:flutter/material.dart';
-// import 'donor_form_screen.dart';
-// import 'available_food_screen.dart';
-
-// class HomeScreen extends StatelessWidget {
-//   const HomeScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text("RESERVE", style: TextStyle(fontWeight: FontWeight.bold)),
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             // Branding Section
-//             const Icon(Icons.eco, size: 100, color: Color(0xFF1B5E20)),
-//             const SizedBox(height: 10),
-//             const Text(
-//               "Reserve",
-//               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Color(0xFF1B5E20)),
-//             ),
-//             const Text(
-//               "Reserve the surplus, Feed the future",
-//               textAlign: TextAlign.center,
-//               style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, color: Colors.grey),
-//             ),
-//             const SizedBox(height: 50),
-
-//             // Navigation Buttons
-//             _buildHomeButton(
-//               context, 
-//               "Donate Food", 
-//               Icons.volunteer_activism, 
-//               const DonorFormScreen(), 
-//               isGreen: true
-//             ),
-//             const SizedBox(height: 20),
-//             _buildHomeButton(
-//               context, 
-//               "Accept Food", 
-//               Icons.handshake, 
-//               const AvailableFoodScreen(), 
-//               isGreen: false
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildHomeButton(BuildContext context, String label, IconData icon, Widget target, {required bool isGreen}) {
-//     return SizedBox(
-//       width: double.infinity,
-//       height: 70,
-//       child: ElevatedButton.icon(
-//         style: ElevatedButton.styleFrom(
-//           backgroundColor: isGreen ? const Color(0xFF1B5E20) : const Color(0xFFFFC107),
-//           foregroundColor: isGreen ? Colors.white : Colors.black,
-//           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-//         ),
-//         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => target)),
-//         icon: Icon(icon),
-//         label: Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//       ),
-//     );
-//   }
-// }
-
-
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'donor_form_screen.dart';
 import 'available_food_screen.dart';
 
@@ -82,30 +9,60 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("ReServe")),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
+      body: SafeArea(
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => const DonorFormScreen()));
-              },
-              child: const Text("Post Food"),
+            const SizedBox(height: 60),
+            // Grifter Headline
+            const Text(
+              "RESERVE",
+              style: TextStyle(
+                fontFamily: 'Grifter', // Needs registration in pubspec.yaml
+                fontSize: 42,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFF1B5E20),
+                letterSpacing: 2,
+              ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => AvailableFoodScreen()));
-              },
-              child: const Text("View Available Food"),
+            Text(
+              "Reserve the surplus, Feed the future",
+              style: GoogleFonts.inter(fontSize: 16, color: Colors.black54),
             ),
+            const Spacer(),
+            
+            // Side-by-Side Horizontal Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildCompactNav(context, "DONATE", Icons.volunteer_activism, const DonorFormScreen()),
+                const SizedBox(width: 20),
+                _buildCompactNav(context, "ACCEPT", Icons.handshake, const AvailableFoodScreen()),
+              ],
+            ),
+            const Spacer(flex: 2),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCompactNav(BuildContext context, String label, IconData icon, Widget target) {
+    return SizedBox(
+      width: 140, // Constrained width
+      height: 180, // Larger height
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          backgroundColor: const Color(0xFF1B5E20),
+          foregroundColor: const Color(0xFFFFC107),
+        ),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => target)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 40),
+            const SizedBox(height: 15),
+            Text(label, style: GoogleFonts.inter(fontWeight: FontWeight.w800)),
           ],
         ),
       ),

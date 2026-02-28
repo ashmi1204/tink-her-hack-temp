@@ -1,153 +1,100 @@
-// import 'package:flutter/material.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:geolocator/geolocator.dart';
-
-// class DonorFormScreen extends StatefulWidget {
-//   const DonorFormScreen({super.key});
-
-//   @override
-//   State<DonorFormScreen> createState() => _DonorFormScreenState();
-// }
-
-// class _DonorFormScreenState extends State<DonorFormScreen> {
-//   final _foodController = TextEditingController();
-//   final _quantityController = TextEditingController();
-
-// Future<void> _uploadFood() async {
-//   try {
-//     // 1. Get Location
-//     Position position = await Geolocator.getCurrentPosition();
-
-//     // 2. Upload to Firestore
-//     await FirebaseFirestore.instance.collection('donations').add({
-//       'foodItem': _foodController.text,
-//       'quantity': _quantityController.text,
-//       'lat': position.latitude,
-//       'lng': position.longitude,
-//       'status': 'available',
-//       'timestamp': FieldValue.serverTimestamp(),
-//     });
-
-//     // 3. NEW: Clear the data entry points
-//     _foodController.clear();
-//     _quantityController.clear();
-
-//     if (mounted) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Food posted! Ready for pickup.')),
-//       );
-//     }
-//   } catch (e) {
-//     debugPrint("Error: $e");
-//   }
-// }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text("Donate Surplus Food")),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           children: [
-//             TextField(controller: _foodController, decoration: const InputDecoration(labelText: "Food Name")),
-//             TextField(controller: _quantityController, decoration: const InputDecoration(labelText: "Quantity")),
-//             const SizedBox(height: 20),
-//             ElevatedButton(onPressed: _uploadFood, child: const Text("Post Donation")),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
 import 'package:flutter/material.dart';
-import '../model/food_post.dart';
-import '../services/firestore_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 
 class DonorFormScreen extends StatefulWidget {
   const DonorFormScreen({super.key});
-
   @override
   State<DonorFormScreen> createState() => _DonorFormScreenState();
 }
 
 class _DonorFormScreenState extends State<DonorFormScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final FirestoreService _firestoreService = FirestoreService();
+  final _nameController = TextEditingController();
+  final _typeController = TextEditingController();
+  final _qtyController = TextEditingController();
+  final _pickupController = TextEditingController();
+  final _deadlineController = TextEditingController();
+  bool _isUploading = false;
 
-  final foodNameController = TextEditingController();
-  final foodTypeController = TextEditingController();
-  final quantityController = TextEditingController();
-  final locationController = TextEditingController();
+  Widget _buildField(String label, TextEditingController ctrl) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1B5E20), // Forest Green
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: TextField(
+        controller: ctrl,
+        style: const TextStyle(color: Colors.white, fontFamily: 'Inter'),
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(color: Color(0xFFFFC107)), // Mango Yellow
+          border: InputBorder.none,
+        ),
+      ),
+    );
+  }
 
-  void submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      final post = FoodPost(
-        id: '',
-        foodName: foodNameController.text,
-        foodType: foodTypeController.text,
-        quantity: int.parse(quantityController.text),
-        location: locationController.text,
-        status: 'available',
-        timestamp: DateTime.now(),
-      );
+  Future<void> _uploadFood() async {
+    setState(() => _isUploading = true);
+    try {
+      Position pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      
+      // Uploading all new fields to food-collector-6a344
+      await FirebaseFirestore.instance.collection('donations').add({
+        'foodName': _nameController.text,
+        'foodType': _typeController.text,
+        'quantity': _qtyController.text,
+        'pickupDetails': _pickupController.text,
+        'deadline': _deadlineController.text,
+        'lat': pos.latitude,
+        'lng': pos.longitude,
+        'status': 'available',
+        'timestamp': FieldValue.serverTimestamp(),
+      });
 
-      await _firestoreService.addFoodPost(post);
+      _nameController.clear();
+      _typeController.clear();
+      _qtyController.clear();
+      _pickupController.clear();
+      _deadlineController.clear();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Donation Posted!")),
-      );
-
-      foodNameController.clear();
-      foodTypeController.clear();
-      quantityController.clear();
-      locationController.clear();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Food successfully posted!'), backgroundColor: Color(0xFF1B5E20)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isUploading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Post Donation")),
-      body: Padding(
+      appBar: AppBar(title: const Text("Posting Form")),
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              _field(foodNameController, "Food Name"),
-              _field(foodTypeController, "Food Type"),
-              _field(quantityController, "Quantity", isNumber: true),
-              _field(locationController, "Location"),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: submitForm,
-                child: const Text("Post Donation"),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _field(TextEditingController controller, String label,
-      {bool isNumber = false}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: TextFormField(
-        controller: controller,
-        keyboardType:
-            isNumber ? TextInputType.number : TextInputType.text,
-        validator: (value) =>
-            value == null || value.isEmpty ? "Required" : null,
-        decoration: InputDecoration(
-          labelText: label,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
+        child: Column(
+          children: [
+            _buildField("Food Name", _nameController),
+            _buildField("Food Type (Veg/Non-Veg)", _typeController),
+            _buildField("Quantity", _qtyController),
+            _buildField("Pickup Location/Details", _pickupController),
+            _buildField("Pickup Deadline (e.g., 9 PM)", _deadlineController),
+            const SizedBox(height: 20),
+            // "Hug Content" Button
+            Center(
+              child: ElevatedButton(
+                onPressed: _isUploading ? null : _uploadFood,
+                style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
+                child: _isUploading 
+                  ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white))
+                  : const Text("Post Donation"),
+              ),
+            ),
+          ],
         ),
       ),
     );
