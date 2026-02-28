@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart'; 
 import 'screens/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'screens/auth_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,19 +42,24 @@ class FoodConnectorApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomeScreen(),
-    );
-  }
-}
-// A temporary placeholder for your first screen
-class DonorHomeScreen extends StatelessWidget {
-  const DonorHomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Food Waste Connector")),
-      body: const Center(child: Text("Firebase Connected. Ready to build the Donor Form!")),
+      // The StreamBuilder listens to the user's login state
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          // While checking if the user is logged in, show a spinner
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
+          // If a user exists, go to the Home Screen
+          if (snapshot.hasData) {
+            return const HomeScreen();
+          }
+          // Otherwise, show the Login/Registration screen
+          return const AuthScreen();
+        },
+      ),
     );
   }
 }
