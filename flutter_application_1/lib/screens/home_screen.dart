@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'donor_form_screen.dart';
-import 'available_food_screen.dart'; // We will create this next
+import 'available_food_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,47 +8,63 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Food Connector")),
-      // The Menu Bar (Drawer)
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.green),
-              child: Text("Menu", style: TextStyle(color: Colors.white, fontSize: 24)),
-            ),
-            ListTile(
-              leading: const Icon(Icons.fastfood),
-              title: const Text("Available Foods"),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AvailableFoodScreen())),
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        title: const Text("RESERVE", style: TextStyle(fontWeight: FontWeight.bold)),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildOptionCard(context, "Donate Food", Icons.volunteer_activism, const DonorFormScreen()),
+            // Branding Section
+            const Icon(Icons.eco, size: 100, color: Color(0xFF1B5E20)),
+            const SizedBox(height: 10),
+            const Text(
+              "Reserve",
+              style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Color(0xFF1B5E20)),
+            ),
+            const Text(
+              "Reserve the surplus, Feed the future",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, color: Colors.grey),
+            ),
+            const SizedBox(height: 50),
+
+            // Navigation Buttons
+            _buildHomeButton(
+              context, 
+              "Donate Food", 
+              Icons.volunteer_activism, 
+              const DonorFormScreen(), 
+              isGreen: true
+            ),
             const SizedBox(height: 20),
-            _buildOptionCard(context, "Accept Food", Icons.handshake, const AvailableFoodScreen()),
+            _buildHomeButton(
+              context, 
+              "Accept Food", 
+              Icons.handshake, 
+              const AvailableFoodScreen(), 
+              isGreen: false
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOptionCard(BuildContext context, String title, IconData icon, Widget target) {
+  Widget _buildHomeButton(BuildContext context, String label, IconData icon, Widget target, {required bool isGreen}) {
     return SizedBox(
-      width: 250,
-      height: 150,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => target)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Icon(icon, size: 50), Text(title, style: const TextStyle(fontSize: 20))],
+      width: double.infinity,
+      height: 70,
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isGreen ? const Color(0xFF1B5E20) : const Color(0xFFFFC107),
+          foregroundColor: isGreen ? Colors.white : Colors.black,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         ),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => target)),
+        icon: Icon(icon),
+        label: Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       ),
     );
   }
