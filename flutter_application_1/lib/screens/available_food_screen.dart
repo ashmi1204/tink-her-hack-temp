@@ -157,12 +157,23 @@ class AvailableFoodScreen extends StatelessWidget {
                             minimumSize: Size.zero, // Allows hugging
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           ),
-                          onPressed: () async {
-                            await FirebaseFirestore.instance.collection('donations').doc(doc.id).update({'status': 'claimed'});
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Successfully claimed!')));
-                            }
-                          },
+                          // lib/screens/available_food_screen.dart
+onPressed: () async {
+  await FirebaseFirestore.instance
+      .collection('donations')
+      .doc(doc.id)
+      .update({'status': 'claimed'});
+
+  if (context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Successfully claimed the food!'),
+        backgroundColor: Color(0xFFFFC107),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+},
                           child: const Text("CLAIM"),
                         ),
                       ),

@@ -6,47 +6,48 @@ import 'available_food_screen.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+  // lib/screens/home_screen.dart
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: SafeArea(
+      child: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 60),
-            // Grifter Headline
+            // Creative Logo & Title Section
+            const Icon(Icons.eco_rounded, size: 80, color: Color(0xFF1B5E20)),
             const Text(
-              "RESERVE",
+              "ReServe",
               style: TextStyle(
-                fontFamily: 'Grifter', // Needs registration in pubspec.yaml
-                fontSize: 42,
-                fontWeight: FontWeight.w900,
+                fontFamily: 'Grifter', // Custom bold font
+                fontSize: 48,
                 color: Color(0xFF1B5E20),
-                letterSpacing: 2,
+                letterSpacing: 1.5,
               ),
             ),
-            Text(
+            const Text(
               "Reserve the surplus, Feed the future",
-              style: GoogleFonts.inter(fontSize: 16, color: Colors.black54),
+              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
             ),
-            const Spacer(),
-            
-            // Side-by-Side Horizontal Row
+            const SizedBox(height: 50),
+            // Side-by-side horizontal navigation
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildCompactNav(context, "DONATE", Icons.volunteer_activism, const DonorFormScreen()),
+                _buildNavBox(context, "DONATE", Icons.volunteer_activism, const DonorFormScreen()),
                 const SizedBox(width: 20),
-                _buildCompactNav(context, "ACCEPT", Icons.handshake, const AvailableFoodScreen()),
+                _buildNavBox(context, "ACCEPT", Icons.handshake, const AvailableFoodScreen()),
               ],
             ),
-            const Spacer(flex: 2),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
-  Widget _buildCompactNav(BuildContext context, String label, IconData icon, Widget target) {
+  Widget _buildNavBox(BuildContext context, String label, IconData icon, Widget target) {
     return SizedBox(
       width: 140, // Constrained width
       height: 180, // Larger height
