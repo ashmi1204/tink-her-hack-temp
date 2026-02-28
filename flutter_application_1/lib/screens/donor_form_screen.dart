@@ -1,4 +1,208 @@
+// 
 
+// import 'package:flutter/material.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:geolocator/geolocator.dart';
+// import 'package:google_fonts/google_fonts.dart';
+
+// class DonorFormScreen extends StatefulWidget {
+//   const DonorFormScreen({super.key});
+//   @override
+//   State<DonorFormScreen> createState() => _DonorFormScreenState();
+// }
+
+// class _DonorFormScreenState extends State<DonorFormScreen> {
+//   final _nameController = TextEditingController();
+//   final _typeController = TextEditingController();
+//   final _qtyController = TextEditingController();
+//   final _pickupController = TextEditingController();
+//   final _deadlineController = TextEditingController();
+//   bool _isUploading = false;
+
+//   @override
+//   void dispose() {
+//     _nameController.dispose();
+//     _typeController.dispose();
+//     _qtyController.dispose();
+//     _pickupController.dispose();
+//     _deadlineController.dispose();
+//     super.dispose();
+//   }
+
+//   Widget _buildField(String label, TextEditingController ctrl,
+//       {TextInputType keyboardType = TextInputType.text}) {
+//     return Container(
+//       margin: const EdgeInsets.only(bottom: 12),
+//       padding: const EdgeInsets.symmetric(horizontal: 16),
+//       decoration: BoxDecoration(
+//         color: const Color(0xFF1B5E20),
+//         borderRadius: BorderRadius.circular(15),
+//       ),
+//       child: TextField(
+//         controller: ctrl,
+//         keyboardType: keyboardType,
+//         style: GoogleFonts.inter(color: Colors.white),
+//         decoration: InputDecoration(
+//           labelText: label,
+//           labelStyle: const TextStyle(color: Color(0xFFFFC107)),
+//           border: InputBorder.none,
+//         ),
+//       ),
+//     );
+//   }
+
+//   Future<void> _uploadFood() async {
+//     // ✅ Validate required fields
+//     if (_nameController.text.trim().isEmpty ||
+//         _qtyController.text.trim().isEmpty) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(
+//           content: Text("Please fill in Food Name and Quantity.",
+//               style: GoogleFonts.inter()),
+//           backgroundColor: Colors.orange,
+//           behavior: SnackBarBehavior.floating,
+//           shape:
+//               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+//         ),
+//       );
+//       return;
+//     }
+
+//     setState(() => _isUploading = true);
+
+//     try {
+//       // Get current GPS location
+//       Position pos = await Geolocator.getCurrentPosition(
+//           desiredAccuracy: LocationAccuracy.high);
+
+//       await FirebaseFirestore.instance.collection('donations').add({
+//         'donorId': FirebaseAuth.instance.currentUser!.uid,
+//         'foodName': _nameController.text.trim(),
+//         'foodType': _typeController.text.trim(),
+//         'quantity': _qtyController.text.trim(),
+//         'pickupDetails': _pickupController.text.trim(),
+//         'deadline': _deadlineController.text.trim(),
+//         'lat': pos.latitude,
+//         'lng': pos.longitude,
+//         'status': 'available',
+//         'timestamp': FieldValue.serverTimestamp(),
+//       });
+
+//       // Clear all fields
+//       _nameController.clear();
+//       _typeController.clear();
+//       _qtyController.clear();
+//       _pickupController.clear();
+//       _deadlineController.clear();
+
+//       if (mounted) {
+//         // ✅ Success popup with icon
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           SnackBar(
+//             content: Row(
+//               children: [
+//                 const Icon(Icons.check_circle, color: Colors.white, size: 20),
+//                 const SizedBox(width: 10),
+//                 Text(
+//                   "Food posted successfully! 🎉",
+//                   style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+//                 ),
+//               ],
+//             ),
+//             backgroundColor: const Color(0xFF1B5E20),
+//             behavior: SnackBarBehavior.floating,
+//             shape:
+//                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+//             duration: const Duration(seconds: 3),
+//           ),
+//         );
+//       }
+//     } on LocationServiceDisabledException {
+//       if (mounted) {
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           SnackBar(
+//             content: Text("Please enable location services.",
+//                 style: GoogleFonts.inter()),
+//             backgroundColor: Colors.red,
+//             behavior: SnackBarBehavior.floating,
+//           ),
+//         );
+//       }
+//     } catch (e) {
+//       debugPrint("Upload Error: $e");
+//       if (mounted) {
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           SnackBar(
+//             content:
+//                 Text("Something went wrong. Try again.", style: GoogleFonts.inter()),
+//             backgroundColor: Colors.red,
+//             behavior: SnackBarBehavior.floating,
+//           ),
+//         );
+//       }
+//     } finally {
+//       if (mounted) setState(() => _isUploading = false);
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text("Posting Form",
+//             style: TextStyle(fontFamily: 'Grifter')),
+//         backgroundColor: const Color(0xFF1B5E20),
+//         foregroundColor: const Color(0xFFFFC107),
+//       ),
+//       body: SingleChildScrollView(
+//         padding: const EdgeInsets.all(20),
+//         child: Column(
+//           children: [
+//             const Icon(Icons.fastfood, size: 60, color: Color(0xFF1B5E20)),
+//             const SizedBox(height: 10),
+//             Text(
+//               "What are you sharing today?",
+//               style: GoogleFonts.inter(
+//                   fontSize: 18, fontWeight: FontWeight.bold),
+//             ),
+//             const SizedBox(height: 20),
+//             _buildField("Food Name *", _nameController),
+//             _buildField("Food Type (Veg / Non-Veg)", _typeController),
+//             _buildField("Quantity *", _qtyController,
+//                 keyboardType: TextInputType.text),
+//             _buildField("Pickup Location / Details", _pickupController),
+//             _buildField("Pickup Deadline (e.g., 9 PM)", _deadlineController),
+//             const SizedBox(height: 20),
+//             SizedBox(
+//               width: double.infinity,
+//               child: ElevatedButton(
+//                 onPressed: _isUploading ? null : _uploadFood,
+//                 style: ElevatedButton.styleFrom(
+//                   backgroundColor: const Color(0xFF1B5E20),
+//                   foregroundColor: const Color(0xFFFFC107),
+//                   padding: const EdgeInsets.symmetric(vertical: 16),
+//                   shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(15)),
+//                 ),
+//                 child: _isUploading
+//                     ? const SizedBox(
+//                         height: 22,
+//                         width: 22,
+//                         child: CircularProgressIndicator(
+//                             color: Colors.white, strokeWidth: 2.5))
+//                     : Text("Post Donation",
+//                         style: GoogleFonts.inter(
+//                             fontSize: 16, fontWeight: FontWeight.bold)),
+//               ),
+//             ),
+//             const SizedBox(height: 20),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 
 import 'package:flutter/material.dart';
